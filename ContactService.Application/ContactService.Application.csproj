@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ContactService.Domain\ContactService.Domain.csproj" />
+    <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
   </ItemGroup>
 
 </Project>

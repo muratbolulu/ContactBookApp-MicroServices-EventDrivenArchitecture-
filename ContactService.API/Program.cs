@@ -2,12 +2,12 @@ using AutoMapper;
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
 using ContactService.Domain.Entities;
-using ContactService.Domain.Interfaces;
 using ContactService.Infrastructure.Persistence;
-using ContactService.Infrastructure.Repositories;
 using ContactService.Infrastructure.Services;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel.Infrastructure;
+using SharedKernel.Interface;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 // DbContext
-builder.Services.AddDbContext<ProjectDbContext>(options =>
+builder.Services.AddDbContext<ContactDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("ContactService.Application"));
