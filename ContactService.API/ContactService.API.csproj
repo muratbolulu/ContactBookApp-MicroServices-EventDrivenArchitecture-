@@ -21,4 +21,8 @@
     <ProjectReference Include="..\ContactService.Infrastructure\ContactService.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EventPublisher\" />
+  </ItemGroup>
+
 </Project>

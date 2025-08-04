@@ -2,12 +2,14 @@ using AutoMapper;
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
 using ContactService.Domain.Entities;
+using ContactService.Infrastructure.Messaging;
 using ContactService.Infrastructure.Persistence;
 using ContactService.Infrastructure.Services;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
+using SharedKernel.Messaging;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,11 +35,10 @@ builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
 builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
 builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo>>();
+builder.Services.AddSingleton<IEventBus, RabbitMQProducer>();
 
 builder.Services.AddControllers();
 //builder.Services.AddFluentValidationAutoValidation();
-//builder.Services.AddValidatorsFromAssemblyContaining<CreatePersonDtoValidator>();
-//builder.Services.AddValidatorsFromAssemblyContaining<CreatePersonCommandValidator>();
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("ContactService.Application"));
 
 // Register Swagger

@@ -20,7 +20,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ReportService.Application\ReportService.Application.csproj" />
     <ProjectReference Include="..\ReportService.Infrastructure\ReportService.Infrastructure.csproj" />
-    <ProjectReference Include="..\ReportService.Shared\ReportService.Shared.csproj" />
   </ItemGroup>
 
 </Project>

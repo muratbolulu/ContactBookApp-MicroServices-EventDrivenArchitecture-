@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ReportService.Application.Features.Reports.Commands;
+using ReportService.Application.Features.Reports.Queries;
 
 namespace ReportService.API.Controllers
 {
@@ -15,10 +18,20 @@ namespace ReportService.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> CreateReport([FromBody] CreateReportCommand command)
         {
-            var id = await _mediator.Send(new CreateReportCommand());
-            return Ok(id);
+            var reportId = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetReportById), new { id = reportId }, null);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetReportById(Guid id)
+        {
+            var result = await _mediator.Send(new GetReportByIdQuery(id));
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
     }
 
