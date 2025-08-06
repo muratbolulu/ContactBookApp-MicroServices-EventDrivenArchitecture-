@@ -36,6 +36,7 @@ builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
 builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
 builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo>>();
 builder.Services.AddSingleton<IEventBus, RabbitMQProducer>();
+//builder.Services.AddSingleton<IRabbitMQProducer, RabbitMQProducer>();
 
 builder.Services.AddControllers();
 //builder.Services.AddFluentValidationAutoValidation();
