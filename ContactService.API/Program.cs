@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
 using SharedKernel.Messaging;
+using SharedKernel.Messaging.Abstraction;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);

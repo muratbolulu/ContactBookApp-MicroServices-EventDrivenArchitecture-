@@ -1,32 +1,25 @@
 ﻿using System.Text;
 using System.Text.Json;
 using RabbitMQ.Client;
-using SharedKernel.Messaging;
+using SharedKernel.Messaging.Abstraction;
 
 namespace ContactService.Infrastructure.Messaging;
 
 public class RabbitMQProducer : IEventBus
 {
-    private readonly IConnection _connection;
-
-    public RabbitMQProducer()
+    public async Task PublishAsync<T>(T message, string queueName)
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
-        _connection = factory.CreateConnection();
-    }
-
-    public Task PublishAsync<T>(T @event) where T : class
-    {
-        using var channel = _connection.CreateModel();
-        var queueName = typeof(T).Name;
+        using var connection = factory.CreateConnection();
+        using var channel = connection.CreateModel();
 
         channel.QueueDeclare(queue: queueName,
-                             durable: false,
-                             exclusive: false,
-                             autoDelete: false,
-                             arguments: null);
+                                     durable: false,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
 
-        var json = JsonSerializer.Serialize(@event);
+        var json = JsonSerializer.Serialize(message);
         var body = Encoding.UTF8.GetBytes(json);
 
         channel.BasicPublish(exchange: "",
@@ -34,6 +27,6 @@ public class RabbitMQProducer : IEventBus
                              basicProperties: null,
                              body: body);
 
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 }
