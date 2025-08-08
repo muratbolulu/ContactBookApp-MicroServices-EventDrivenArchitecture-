@@ -1,15 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ContactService.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using SharedKernel.Interface;
 using System.Linq.Expressions;
 
 namespace SharedKernel.Infrastructure;
 
-public class GenericRepository<T> : IGenericRepository<T> where T : class
+public class GenericRepository<T, TContext> : IGenericRepository<T> 
+    where T : class
+    where TContext : DbContext
 {
-    private readonly DbContext _context;
+    protected readonly TContext _context;
     private readonly DbSet<T> _dbSet;
 
-    public GenericRepository(DbContext context)
+    public GenericRepository(TContext context)
     {
         _context = context;
         _dbSet = context.Set<T>();

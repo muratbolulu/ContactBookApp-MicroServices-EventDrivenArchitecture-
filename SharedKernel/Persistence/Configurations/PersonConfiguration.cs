@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ContactService.Infrastructure.Persistence.Configurations;
+namespace SharedKernel.Persistence.Configurations;
 
 public class PersonConfiguration : IEntityTypeConfiguration<Person>
 {

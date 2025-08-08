@@ -1,3 +1,4 @@
+using ContactService.API.PublisherMessage;
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
 using ContactService.Domain.Entities;
@@ -33,8 +34,10 @@ builder.Services.AddMediatR(cfg =>
 // Application Services
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
-builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
-builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo>>();
+builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person, ContactDbContext>>();
+builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo, ContactDbContext>>();
+
+//builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
 
 // MassTransit with RabbitMQ
 builder.Services.AddMassTransit(x =>
@@ -65,11 +68,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.MapGet("/", async (IPublishEndpoint publishEndpoint) =>
 {
-    await publishEndpoint.Publish(new Object {/* Text = "Hello MassTransit!" */});
+    await publishEndpoint.Publish(new MyMessage { Text = "Hello MassTransit!" });
     return Results.Ok("Message published!");
 });
 

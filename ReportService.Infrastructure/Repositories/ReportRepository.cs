@@ -4,7 +4,7 @@ using SharedKernel.Infrastructure;
 
 namespace ReportService.Infrastructure.Repositories;
 
-public class ReportRepository : GenericRepository<Report>
+public class ReportRepository : GenericRepository<Report, ReportDbContext>
 {
     public ReportRepository(ReportDbContext context) : base(context)
     {
