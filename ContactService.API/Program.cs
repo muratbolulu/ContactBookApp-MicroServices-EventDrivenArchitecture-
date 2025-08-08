@@ -1,50 +1,56 @@
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
 using ContactService.Domain.Entities;
-using ContactService.Infrastructure.Messaging;
 using ContactService.Infrastructure.Persistence;
 using ContactService.Infrastructure.Services;
 using FluentValidation;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
-using SharedKernel.Messaging;
-using SharedKernel.Messaging.Abstraction;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 // DbContext
 builder.Services.AddDbContext<ContactDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("ContactService.Application"));
 
+// AutoMapper
 builder.Services.AddAutoMapper(cfg => {
     cfg.AddMaps(typeof(PersonProfile).Assembly);
 });
 
+// MediatR
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(Assembly.Load("ContactService.Application"));
 });
 
-// Register Application Services
+// Application Services
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
 builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>();
 builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo>>();
-builder.Services.AddSingleton<IEventBus, RabbitMQProducer>();
-//builder.Services.AddSingleton<IRabbitMQProducer, RabbitMQProducer>();
 
+// MassTransit with RabbitMQ
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+    });
+});
+
+// Controllers & Swagger
 builder.Services.AddControllers();
-//builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssembly(Assembly.Load("ContactService.Application"));
-
-// Register Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -61,6 +67,13 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.MapGet("/", async (IPublishEndpoint publishEndpoint) =>
+{
+    await publishEndpoint.Publish(new Object {/* Text = "Hello MassTransit!" */});
+    return Results.Ok("Message published!");
+});
+
 app.MapControllers();
 
 app.Run();
+

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ContactService.Application.Features.Persons.Commands;
 using ContactService.Domain.Entities;
+using MassTransit;
 using MediatR;
 using SharedKernel.Events;
 using SharedKernel.Interface;
@@ -13,14 +14,14 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, G
 {
     private readonly IGenericRepository<Person> _personRepository;
     private readonly IMapper _mapper;
-    private readonly IEventBus _eventBus;
+    private readonly IPublishEndpoint _publishEndpoint;
     public const string PersonCreated = "person-created-queue";
 
-    public CreatePersonCommandHandler(IGenericRepository<Person> personRepository, IMapper mapper, IEventBus eventBus)
+    public CreatePersonCommandHandler(IGenericRepository<Person> personRepository, IMapper mapper, IPublishEndpoint publishEndpoint)
     {
         _personRepository = personRepository;
         _mapper = mapper;
-        _eventBus = eventBus;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<Guid> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
@@ -31,12 +32,14 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, G
         await _personRepository.AddAsync(person);
         await _personRepository.SaveChangesAsync();
 
-        await _eventBus.PublishAsync(new PersonCreatedEvent
+        var @event = new PersonCreatedEvent
         {
-            PersonId = person.Id,
+            PersonId = Guid.NewGuid(), // Gerçek veritabanı id’siyle değiştir
             FullName = $"{person.FirstName} {person.LastName}",
             CreatedAt = DateTime.UtcNow
-        }, PersonCreated);
+        };
+
+        await _publishEndpoint.Publish(@event);
 
         return person.Id;
     }

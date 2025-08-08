@@ -1,8 +1,7 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using ReportService.Application.EventHandlers;
 using ReportService.Domain.Entities;
-using ReportService.Domain.Interfaces;
-using ReportService.Infrastructure.Messaging;
+using ReportService.Infrastructure.EventHandlers;
 using ReportService.Infrastructure.NewFolder.Services;
 using ReportService.Infrastructure.Persistence;
 using ReportService.Infrastructure.Repositories;
@@ -26,10 +25,23 @@ builder.Services.AddMediatR(cfg =>
 
 
 builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report>>();
-builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddHostedService<ReportBackgroundService>();
-builder.Services.AddHostedService<RabbitMQConsumerService>();
-builder.Services.AddHostedService<PersonCreatedEventConsumer>();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<PersonCreatedEventConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", h => { });
+
+        cfg.ReceiveEndpoint("person-created-event-queue", e =>
+        {
+            e.ConfigureConsumer<PersonCreatedEventConsumer>(context);
+        });
+    });
+});
+
 
 var app = builder.Build();
 

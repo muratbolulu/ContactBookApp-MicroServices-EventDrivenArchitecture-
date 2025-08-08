@@ -3,18 +3,17 @@ using MediatR;
 using ReportService.Application.Features.Reports.Commands;
 using ReportService.Domain.Entities;
 using ReportService.Domain.Enums;
-using ReportService.Domain.Interfaces;
 using SharedKernel.Interface;
 
 namespace ReportService.Application.Features.Reports.Handlers.Commands;
 public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, Guid>
 {
-    private readonly IReportRepository _repository;
+    private readonly IGenericRepository<Report> _reportRepository;
     private readonly IMapper _mapper;
 
-    public CreateReportCommandHandler(IReportRepository repository, IMapper mapper)
+    public CreateReportCommandHandler(IGenericRepository<Report> reportRepository, IMapper mapper)
     {
-        _repository = repository;
+        _reportRepository = reportRepository;
         _mapper = mapper;
     }
 
@@ -28,8 +27,8 @@ public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, G
             Status = ReportStatus.Pending
         };
 
-        await _repository.AddAsync(report);
-        await _repository.SaveChangesAsync();
+        await _reportRepository.AddAsync(report);
+        await _reportRepository.SaveChangesAsync();
 
         return report.Id;
     }
