@@ -4,7 +4,7 @@ using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 
-namespace ReportService.Application.EventHandlers;
+namespace ReportService.Infrastructure.EventHandlers;
 
 public class PersonCreatedEventConsumer : BackgroundService
 {
@@ -53,6 +53,7 @@ public class PersonCreatedEventConsumer : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Mesaj işlenirken hata oluştu.");
+                // Hata durumunda BasicNack gönderilebilir
                 _channel.BasicNack(ea.DeliveryTag, false, true);
             }
         };

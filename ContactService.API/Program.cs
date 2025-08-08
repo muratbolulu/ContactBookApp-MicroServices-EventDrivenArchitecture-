@@ -1,4 +1,3 @@
-using AutoMapper;
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
 using ContactService.Domain.Entities;
@@ -7,6 +6,7 @@ using ContactService.Infrastructure.Persistence;
 using ContactService.Infrastructure.Services;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
 using SharedKernel.Messaging;
@@ -23,8 +23,9 @@ builder.Services.AddDbContext<ContactDbContext>(options =>
 
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("ContactService.Application"));
 
-//builder.Services.AddAutoMapper(typeof(Profile).Assembly);
-builder.Services.AddAutoMapper(typeof(PersonProfile).Assembly);
+builder.Services.AddAutoMapper(cfg => {
+    cfg.AddMaps(typeof(PersonProfile).Assembly);
+});
 
 builder.Services.AddMediatR(cfg =>
 {

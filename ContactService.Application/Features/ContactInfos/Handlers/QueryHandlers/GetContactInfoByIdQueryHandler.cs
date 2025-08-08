@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ContactService.Application.DTOs;
 using ContactService.Application.Features.ContactInfos.Queries;
-using ContactService.Domain.Interfaces;
 using MediatR;
+using SharedKernel.Interface;
 
 namespace ContactService.Application.Features.ContactInfos.Handlers.QueryHandlers;
 

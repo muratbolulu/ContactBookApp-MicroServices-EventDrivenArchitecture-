@@ -10,9 +10,9 @@ public class PersonProfile : Profile
     public PersonProfile()
     {
         CreateMap<Person, PersonDetailDto>();
-        CreateMap<PersonDetailDto, Person>();
-        CreateMap<ContactInfo, ContactInfoDto>();
+        //CreateMap<PersonDetailDto, Person>();
+        //CreateMap<ContactInfo, ContactInfoDto>();
 
-        CreateMap<CreatePersonCommand, Person>();
+        //CreateMap<CreatePersonCommand, Person>();
     }
 }

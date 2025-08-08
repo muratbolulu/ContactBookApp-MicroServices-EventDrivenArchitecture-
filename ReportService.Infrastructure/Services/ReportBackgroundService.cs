@@ -28,7 +28,7 @@ public class ReportBackgroundService : BackgroundService
             using var scope = _serviceProvider.CreateScope();
             var reportRepository = scope.ServiceProvider.GetRequiredService<IGenericRepository<Report>>();
 
-            var pendingReports = await reportRepository.GetWhereAsync(r => r.Status == ReportStatus.Preparing);
+            var pendingReports = await reportRepository.GetWhereAsync(r => r.Status == ReportStatus.Pending);
 
             foreach (var report in pendingReports)
             {

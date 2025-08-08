@@ -9,4 +9,5 @@ public class Report
     public string Location { get; set; } // tekrar dönülecek
     public ReportStatus Status { get; set; } = ReportStatus.Pending;
     public string FilePath { get; set; }
+    public string? Content { get; set; }
 }

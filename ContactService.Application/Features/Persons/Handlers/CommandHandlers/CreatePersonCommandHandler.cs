@@ -5,6 +5,7 @@ using MediatR;
 using SharedKernel.Events;
 using SharedKernel.Interface;
 using SharedKernel.Messaging;
+using SharedKernel.Messaging.Abstraction;
 
 namespace ContactService.Application.Features.Persons.Handlers.CommandHandlers;
 
@@ -13,6 +14,7 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, G
     private readonly IGenericRepository<Person> _personRepository;
     private readonly IMapper _mapper;
     private readonly IEventBus _eventBus;
+    public const string PersonCreated = "person-created-queue";
 
     public CreatePersonCommandHandler(IGenericRepository<Person> personRepository, IMapper mapper, IEventBus eventBus)
     {
@@ -34,7 +36,7 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, G
             PersonId = person.Id,
             FullName = $"{person.FirstName} {person.LastName}",
             CreatedAt = DateTime.UtcNow
-        });
+        }, PersonCreated);
 
         return person.Id;
     }
