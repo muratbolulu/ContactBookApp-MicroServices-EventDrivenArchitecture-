@@ -1,6 +1,7 @@
 using ContactService.Domain.Entities;
 using ContactService.Infrastructure.Persistence;
 using MassTransit;
+using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
 using ReportService.Application.Mappings;
 using ReportService.Domain.Entities;
@@ -8,6 +9,7 @@ using ReportService.Infrastructure.EventHandlers;
 using ReportService.Infrastructure.NewFolder.Services;
 using ReportService.Infrastructure.Persistence;
 using ReportService.Infrastructure.Repositories;
+using SharedKernel.Events;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
 using System.Reflection;
@@ -56,3 +58,22 @@ app.UseRouting();
 app.MapControllers();
 
 app.Run();
+
+//test. 
+var harness = new InMemoryTestHarness();
+
+// Tüketiciyi ekle
+var consumerHarness = harness.Consumer<PersonCreatedEventConsumer>();
+
+await harness.Start();
+try
+{
+    await harness.InputQueueSendEndpoint.Send(new PersonCreatedEvent {  });
+
+    Assert.True(await harness.Consumed.S elect<PersonCreatedEvent>().Any());
+    Assert.True(await consumerHarness.Consumed.Select<PersonCreatedEvent>().Any());
+}
+finally
+{
+    await harness.Stop();
+}

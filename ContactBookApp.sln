@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportService.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{13FAC536-9738-45B7-A411-4F726AEB818D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportService.Tests", "ReportService.Tests\ReportService.Tests.csproj", "{472F8162-DC0F-41CB-A0DE-BF1EF5E36483}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{13FAC536-9738-45B7-A411-4F726AEB818D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13FAC536-9738-45B7-A411-4F726AEB818D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13FAC536-9738-45B7-A411-4F726AEB818D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{472F8162-DC0F-41CB-A0DE-BF1EF5E36483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{472F8162-DC0F-41CB-A0DE-BF1EF5E36483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{472F8162-DC0F-41CB-A0DE-BF1EF5E36483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{472F8162-DC0F-41CB-A0DE-BF1EF5E36483}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{6B048FE2-5750-494E-989E-94C7ED8AAB5D} = {ECB14621-CB3B-4741-846A-8961D90F2028}
 		{0C504B3B-66FB-40CF-989A-80BE86BF786A} = {ECB14621-CB3B-4741-846A-8961D90F2028}
 		{9C22AB3C-B3F4-4ADF-BB4D-18105C296273} = {ECB14621-CB3B-4741-846A-8961D90F2028}
+		{472F8162-DC0F-41CB-A0DE-BF1EF5E36483} = {ECB14621-CB3B-4741-846A-8961D90F2028}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8816C465-0D7B-45D4-BBE7-56B970A28DFD}
