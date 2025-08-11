@@ -1,14 +1,12 @@
-using ContactService.Domain.Entities;
-using ContactService.Infrastructure.Persistence;
 using MassTransit;
 using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
+using NUnit.Framework;
 using ReportService.Application.Mappings;
 using ReportService.Domain.Entities;
 using ReportService.Infrastructure.EventHandlers;
 using ReportService.Infrastructure.NewFolder.Services;
 using ReportService.Infrastructure.Persistence;
-using ReportService.Infrastructure.Repositories;
 using SharedKernel.Events;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
@@ -18,22 +16,30 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// DbContext
 builder.Services.AddDbContext<ReportDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// MediatR
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(Assembly.Load("ReportService.Application"));
 });
 
-builder.Services.AddAutoMapper(cfg => {
+// AutoMapper
+builder.Services.AddAutoMapper(cfg =>
+{
     cfg.AddMaps(typeof(ReportProfile).Assembly);
 });
 
-//builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report>>();
+// Repository
 builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report, ReportDbContext>>();
+
+// Hosted Service
 builder.Services.AddHostedService<ReportBackgroundService>();
 
+// MassTransit + RabbitMQ
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<PersonCreatedEventConsumer>();
@@ -58,22 +64,3 @@ app.UseRouting();
 app.MapControllers();
 
 app.Run();
-
-//test. 
-var harness = new InMemoryTestHarness();
-
-// Tüketiciyi ekle
-var consumerHarness = harness.Consumer<PersonCreatedEventConsumer>();
-
-await harness.Start();
-try
-{
-    await harness.InputQueueSendEndpoint.Send(new PersonCreatedEvent {  });
-
-    Assert.True(await harness.Consumed.S elect<PersonCreatedEvent>().Any());
-    Assert.True(await consumerHarness.Consumed.Select<PersonCreatedEvent>().Any());
-}
-finally
-{
-    await harness.Stop();
-}

@@ -32,12 +32,12 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, G
         await _personRepository.AddAsync(person);
         await _personRepository.SaveChangesAsync();
 
-        var @event = new PersonCreatedEvent
-        {
-            PersonId = Guid.NewGuid(), // Gerçek veritabanı id’siyle değiştir
-            FullName = $"{person.FirstName} {person.LastName}",
-            CreatedAt = DateTime.UtcNow
-        };
+        var @event = new PersonCreatedEvent(
+            person.Id,
+            $"{person.FirstName} {person.LastName}",
+            DateTime.UtcNow
+        );
+
 
         await _publishEndpoint.Publish(@event);
 
