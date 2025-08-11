@@ -1,36 +1,44 @@
 ﻿using MassTransit;
 using MassTransit.Testing;
-using SharedKernel.Events;
 using ReportService.Infrastructure.EventHandlers;
+using SharedKernel.Events;
 
-namespace ReportService.Tests;
-
-public class PersonCreatedEventTests
+namespace ReportService.Tests
 {
-    [Fact]
-    public async Task PersonCreatedEvent_ShouldBeConsumed()
+    public class PersonCreatedEventTests : IAsyncLifetime
     {
-        // Arrange - InMemory broker başlat  
-        using var harness = new InMemoryTestHarness();
-        var consumerHarness = harness.Consumer<PersonCreatedEventConsumer>();
+        private InMemoryTestHarness _harness;
+        private ConsumerTestHarness<PersonCreatedEventConsumer> _consumerHarness;
 
-        await harness.Start();
-        try
+        public async Task InitializeAsync()
         {
-            // Act - Event gönder  
-            await harness.InputQueueSendEndpoint.Send(new PersonCreatedEvent(
+            _harness = new InMemoryTestHarness();
+            _consumerHarness = _harness.Consumer<PersonCreatedEventConsumer>();
+
+            await _harness.Start();
+        }
+
+        public async Task DisposeAsync()
+        {
+            await _harness.Stop();
+        }
+
+        [Fact]
+        public async Task PersonCreatedEvent_ShouldBeConsumed()
+        {
+            // Arrange
+            var testEvent = new PersonCreatedEvent(
                 Guid.NewGuid(),
                 "Murat Bolulu",
                 DateTime.UtcNow
-            ));
+            );
 
-            // Asserts
-            Assert.True(await harness.Consumed.Any<PersonCreatedEvent>(), "Event publish edilmedi!");
-            Assert.True(await consumerHarness.Consumed.Any<PersonCreatedEvent>(), "Event consumer tarafından alınmadı!");
-        }
-        finally
-        {
-            await harness.Stop();
+            // Act
+            await _harness.InputQueueSendEndpoint.Send(testEvent);
+
+            // Assert
+            Assert.True(await _harness.Consumed.Any<PersonCreatedEvent>());
+            Assert.True(await _consumerHarness.Consumed.Any<PersonCreatedEvent>());
         }
     }
 }

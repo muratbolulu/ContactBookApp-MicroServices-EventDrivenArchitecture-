@@ -1,7 +1,5 @@
 ﻿using MassTransit;
 using SharedKernel.Events;
-using System.Text;
-using System.Text.Json;
 
 namespace ReportService.Infrastructure.EventHandlers;
 
