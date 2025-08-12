@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ReportService.Application.Features.Reports.Commands;
 using ReportService.Application.Features.Reports.Queries;
@@ -8,7 +7,7 @@ namespace ReportService.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ReportsController : ControllerBase
+    public class ReportsController : BaseController
     {
         private readonly IMediator _mediator;
 

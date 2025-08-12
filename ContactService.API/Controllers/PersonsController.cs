@@ -8,7 +8,7 @@ namespace ContactService.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PersonsController : ControllerBase
+public class PersonsController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IValidator<CreatePersonCommand> _validator;

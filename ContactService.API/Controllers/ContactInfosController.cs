@@ -1,5 +1,4 @@
-﻿using ContactService.Application.DTOs;
-using ContactService.Application.Features.ContactInfo.Commands;
+﻿using ContactService.Application.Features.ContactInfo.Commands;
 using ContactService.Application.Features.ContactInfos.Commands;
 using ContactService.Application.Features.ContactInfos.Queries;
 using FluentValidation;
@@ -10,7 +9,7 @@ namespace ContactService.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ContactInfosController : ControllerBase
+public class ContactInfosController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IValidator<CreateContactInfoCommand> _validator;
@@ -44,7 +43,7 @@ public class ContactInfosController : ControllerBase
 
         if (contactInfo == null)
             return NotFound();
-
+        
         return Ok(contactInfo);
     }
 
