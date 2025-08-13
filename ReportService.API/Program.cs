@@ -1,13 +1,10 @@
 using MassTransit;
-using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
-using NUnit.Framework;
 using ReportService.Application.Mappings;
 using ReportService.Domain.Entities;
 using ReportService.Infrastructure.EventHandlers;
 using ReportService.Infrastructure.NewFolder.Services;
 using ReportService.Infrastructure.Persistence;
-using SharedKernel.Events;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
 using System.Reflection;

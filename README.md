@@ -46,12 +46,14 @@ SeturProject/
 │   ├── API/
 │   ├── Application/
 │   ├── Infrastructure/
+│   │   └── Migrations/      ← ContactService için EF Core migration dosyaları
 │   └── Domain/
 │
 ├── ReportService/
 │   ├── API/
 │   ├── Application/
 │   ├── Infrastructure/
+│   │   └── Migrations/      ← ReportService için EF Core migration dosyaları
 │   ├── Domain/
 │   └── Tests/
 │
@@ -61,3 +63,4 @@ SeturProject/
 │   └── Infrastructure/
 │
 └── README.md
+
