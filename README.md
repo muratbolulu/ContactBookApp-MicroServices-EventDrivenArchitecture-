@@ -38,7 +38,7 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 - **xUnit** + **MassTransit.Testing**
 
 ---
-## Migrations ve Çalıştırmalar
+## Migrations ve Çlıştırmalar
 - **ContactService.API "Set As Startup Project" sonrasında  add-migration initial ile migration oluşturulabilir.**
 - Akabinde **Update-Database** komutu ile veritabanı yoksa eklenebilir.**
 - POST https://localhost:7033/api/persons ile person oluşturulabilir.
@@ -48,22 +48,30 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 
 
 ## Klasör Yapısı
-
+```
 SeturProject/
-├─ ContactService/
-│  ├─ API/
-│  ├─ Application/
-│  ├─ Infrastructure/		← ContactService için EF Core migration dosyaları
-│  └─ Migrations/
-├─ ReportService/
-│  ├─ API/
-│  ├─ Application/
-│  ├─ Infrastructure/		← ReportService için EF Core migration dosyaları
-│  ├─ Migrations/
-│  ├─ Domain/
-│  └─ Tests/
-└─ SharedKernel/
-   ├─ Events/
-   ├─ Interfaces/
-   └─ Infrastructure/
+│
+├── ContactService/
+│   ├── API/
+│   ├── Application/
+│   ├── Infrastructure/
+│   │   └── Migrations/      ← ContactService için EF Core migration dosyaları
+│   └── Domain/
+│
+├── ReportService/
+│   ├── API/
+│   ├── Application/
+│   ├── Infrastructure/
+│   │   └── Migrations/      ← ReportService için EF Core migration dosyaları
+│   ├── Domain/
+│   └── Tests/
+│
+├── SharedKernel/
+│   ├── Events/
+│   ├── Interfaces/
+│   └── Infrastructure/
+│
+└── README.md
+```
+
 
