@@ -8,9 +8,9 @@ namespace ContactService.Infrastructure.Services;
 
 public class PersonService : IPersonService
 {
-    private readonly ContactDbContext _context;
+    private readonly ContactDb _context;
 
-    public PersonService(ContactDbContext context)
+    public PersonService(ContactDb context)
     {
         _context = context;
     }

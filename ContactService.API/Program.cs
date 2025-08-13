@@ -1,6 +1,7 @@
 using ContactService.API.PublisherMessage;
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
+using ContactService.Application.Validators;
 using ContactService.Domain.Entities;
 using ContactService.Infrastructure.Persistence;
 using ContactService.Infrastructure.Services;
@@ -14,11 +15,15 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // DbContext
-builder.Services.AddDbContext<ContactDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ContactDb>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+         b => b.MigrationsAssembly("ContactService.Infrastructure") // Migration dosyalarýný buraya ekle
+        ));
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("ContactService.Application"));
+builder.Services.AddValidatorsFromAssemblyContaining<CreatePersonCommandValidator>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(cfg => {
@@ -34,8 +39,8 @@ builder.Services.AddMediatR(cfg =>
 // Application Services
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
-builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person, ContactDbContext>>();
-builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo, ContactDbContext>>();
+builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person, ContactDb>>();
+builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo, ContactDb>>();
 
 //builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
 

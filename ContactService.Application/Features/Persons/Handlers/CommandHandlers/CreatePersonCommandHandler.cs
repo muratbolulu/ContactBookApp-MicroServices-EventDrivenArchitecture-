@@ -5,8 +5,6 @@ using MassTransit;
 using MediatR;
 using SharedKernel.Events;
 using SharedKernel.Interface;
-using SharedKernel.Messaging;
-using SharedKernel.Messaging.Abstraction;
 
 namespace ContactService.Application.Features.Persons.Handlers.CommandHandlers;
 

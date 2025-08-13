@@ -1,11 +1,12 @@
 ﻿using ContactService.Application.DTOs;
+using ContactService.Application.Features.Persons.Commands;
 using FluentValidation;
 
 namespace ContactService.Application.Validators;
 
-public class CreatePersonDtoValidator : AbstractValidator<CreatePersonDto>
+public class CreatePersonCommandValidator : AbstractValidator<CreatePersonCommand>
 {
-    public CreatePersonDtoValidator()
+    public CreatePersonCommandValidator()
     {
         RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("Ad boş olamaz")

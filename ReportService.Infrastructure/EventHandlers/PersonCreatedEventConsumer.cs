@@ -7,11 +7,15 @@ namespace ReportService.Infrastructure.EventHandlers;
 
 public class PersonCreatedEventConsumer : IConsumer<PersonCreatedEvent>
 {
-    private readonly ReportDbContext _dbContext;
+    private readonly ReportDb _dbContext;
 
-    public PersonCreatedEventConsumer(ReportDbContext dbContext)
+    public PersonCreatedEventConsumer(ReportDb dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public PersonCreatedEventConsumer()
+    {
     }
 
     public async Task Consume(ConsumeContext<PersonCreatedEvent> context)

@@ -3,9 +3,9 @@ using ReportService.Domain.Entities;
 
 namespace ReportService.Infrastructure.Persistence;
 
-public class ReportDbContext : DbContext
+public class ReportDb : DbContext
 {
-    public ReportDbContext(DbContextOptions<ReportDbContext> options) : base(options) { }
+    public ReportDb(DbContextOptions<ReportDb> options) : base(options) { }
 
     public DbSet<Report> Reports { get; set; }
 

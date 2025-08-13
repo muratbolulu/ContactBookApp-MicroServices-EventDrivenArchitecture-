@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContactService.Infrastructure.Persistence;
 
-public class ContactDbContext : DbContext
+public class ContactDb : DbContext
 {
-    public ContactDbContext(DbContextOptions<ContactDbContext> options)
+    public ContactDb(DbContextOptions<ContactDb> options)
         : base(options) { }
 
     public DbSet<Person> Persons => Set<Person>();
@@ -14,7 +14,7 @@ public class ContactDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //PersonConfiguration, ContactInfoConfiguration için topluca ekler.
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ContactDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ContactDb).Assembly);
         base.OnModelCreating(modelBuilder);
     }
 

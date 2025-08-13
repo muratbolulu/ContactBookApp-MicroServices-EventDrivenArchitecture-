@@ -15,8 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // DbContext
-builder.Services.AddDbContext<ReportDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ReportDb>(options =>
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly("ReportService.Infrastructure") // Migration dosyalarýný buraya ekle
+    ));
 
 // MediatR
 builder.Services.AddMediatR(cfg =>
@@ -31,7 +34,7 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 // Repository
-builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report, ReportDbContext>>();
+builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report, ReportDb>>();
 
 // Hosted Service
 builder.Services.AddHostedService<ReportBackgroundService>();

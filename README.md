@@ -9,7 +9,8 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 ## 📌 Mimarinin Genel Yapısı
 
 ### 1. **ContactService**
-- Kullanıcı ekleme, güncelleme ve silme gibi kişi yönetimi işlemlerini yapar.
+- Kullanıcı ekleme kişi yönetimi işlemlerini yapar. 
+- (kişi silme eklenecek/yapılandırılacak) (contact ekleme-silme eklenecek/yapılandırılacak)
 - Kişi oluşturulduğunda `PersonCreatedEvent` olayı yayınlar.
 - Olay yayınlamak için **IPublishEndpoint** (MassTransit) kullanır.
 
@@ -37,6 +38,16 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 - **xUnit** + **MassTransit.Testing**
 
 ---
+## Migrations
+- **ContactService.API "Set As Startup Project" sonrasında  add-migration initial ile migration oluşturulabilir.**
+- Akabinde **Update-Database** komutu ile veritabanı yoksa eklenebilir.**
+- POST https://localhost:7033/api/persons ile person oluşturulabilir.
+
+- **ReportService.API "Set As Startup Project" sonrasında  add-migration initial ile migration oluşturulabilir.**
+- Akabinde **Update-Database** komutu ile veritabanı güncellenebilir.**
+
+
+
 
 ## Klasör Yapısı
 
