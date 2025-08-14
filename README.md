@@ -28,7 +28,7 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 
 ## ⚙️ Kullanılan Teknolojiler
 
-- **.NET 8**
+- **.NET 9**
 - **MassTransit** (v8.x)
 - **RabbitMQ**
 - **PostgreSQL**
