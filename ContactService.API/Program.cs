@@ -1,7 +1,5 @@
-using ContactService.API.PublisherMessage;
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
-using ContactService.Application.Validators;
 using ContactService.Domain.Entities;
 using ContactService.Infrastructure.Persistence;
 using ContactService.Infrastructure.Services;
@@ -24,11 +22,12 @@ builder.Services.AddDbContext<ContactDb>(options =>
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("ContactService.Application"));
-builder.Services.AddValidatorsFromAssemblyContaining<CreatePersonCommandValidator>();
 
 // AutoMapper
-builder.Services.AddAutoMapper(cfg => {
+builder.Services.AddAutoMapper(cfg =>
+{
     cfg.AddMaps(typeof(PersonProfile).Assembly);
+    cfg.AddMaps(typeof(ContactInfoProfile).Assembly);
 });
 
 // MediatR
@@ -43,8 +42,6 @@ builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
 builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person, ContactDb>>();
 builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo, ContactDb>>();
 
-//builder.Services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
-
 // MassTransit with RabbitMQ
 builder.Services.AddMassTransit(x =>
 {
@@ -58,16 +55,15 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+// Controllers
 //string-enum dönüþümleri için JsonStringEnumConverter ekle
 builder.Services.AddControllers()
     .AddJsonOptions(opts =>
     {
         opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+    }
+);
 
-
-// Controllers & Swagger
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -94,11 +90,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", async (IPublishEndpoint publishEndpoint) =>
-{
-    await publishEndpoint.Publish(new MyMessage { Text = "Hello MassTransit!" });
-    return Results.Ok("Message published!");
-});
+//app.MapGet("/", async (IPublishEndpoint publishEndpoint) =>
+//{
+//    await publishEndpoint.Publish(new MyMessage { Text = "Hello MassTransit!" });
+//    return Results.Ok("Message published!");
+//});
 
 app.MapControllers();
 
