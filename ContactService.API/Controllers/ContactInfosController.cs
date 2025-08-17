@@ -11,19 +11,17 @@ namespace ContactService.API.Controllers;
 [Route("api/[controller]")]
 public class ContactInfosController : BaseController
 {
-    private readonly IMediator _mediator;
-    private readonly IValidator<CreateContactInfoCommand> _validator;
-
-    public ContactInfosController(IValidator<CreateContactInfoCommand> validator, IMediator mediator)
+    public ContactInfosController(IMediator mediator, IServiceProvider serviceProvider)
+        : base(mediator, serviceProvider)
     {
-        _mediator = mediator;
-        _validator = validator;
     }
 
     [HttpPost]
     public async Task<IActionResult> AddContactInfo([FromBody] CreateContactInfoCommand command)
     {
-        var result = await _validator.ValidateAsync(command);
+        var validator = GetValidator<CreateContactInfoCommand>();
+        var result = await validator.ValidateAsync(command);
+
         if (!result.IsValid)
             return BadRequest(result.Errors.Select(e => new 
             { 
@@ -31,7 +29,7 @@ public class ContactInfosController : BaseController
                 Message=e.ErrorMessage 
             }));
 
-        var id = await _mediator.Send(command);
+        var id = await Mediator.Send(command);
         return Ok(id);
     }
 
@@ -39,7 +37,7 @@ public class ContactInfosController : BaseController
     public async Task<IActionResult> GetById(Guid id)
     {
         var query = new GetContactInfoByIdQuery(id);
-        var contactInfo = await _mediator.Send(query);
+        var contactInfo = await Mediator.Send(query);
 
         if (contactInfo == null)
             return NotFound();
@@ -50,7 +48,7 @@ public class ContactInfosController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteContactInfo(Guid id)
     {
-        var result = await _mediator.Send(new DeleteContactInfoCommand(id));
+        var result = await Mediator.Send(new DeleteContactInfoCommand(id));
         if (!result)
             return NotFound();
 

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using SharedKernel.Infrastructure;
 using SharedKernel.Interface;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,14 @@ builder.Services.AddMassTransit(x =>
         });
     });
 });
+
+//string-enum dönüþümleri için JsonStringEnumConverter ekle
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 
 // Controllers & Swagger
 builder.Services.AddControllers();
