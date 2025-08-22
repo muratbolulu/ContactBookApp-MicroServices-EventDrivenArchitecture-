@@ -21,7 +21,7 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 - PostgreSQL veritabanı kullanır.
 - **BackgroundService** ile rapor işlemlerini asenkron yürütür.
 
-- ### 2+. **ReportService** (2 yerine 2+ olarak; Yapı buraya göre değiştirilecek)
+### 2+. **ReportService** (2 yerine 2+ olarak; Yapı buraya göre değiştirilecek)
 - **ReportService**'ten gelen olayları **ContactService** dinler (`ReportCreatedEventConsumer`). Üçüncü bir katman düşünülebilir.
 - Rapor verilerini oluşturur ve saklar.
 - PostgreSQL veritabanı kullanır.
