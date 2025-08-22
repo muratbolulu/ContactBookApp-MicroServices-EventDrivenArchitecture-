@@ -9,14 +9,21 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 ## 📌 Mimarinin Genel Yapısı
 
 ### 1. **ContactService**
-- Kullanıcı ekleme kişi yönetimi işlemlerini yapar. 
-- (kişi silme eklenecek/yapılandırılacak) (contact ekleme-silme eklenecek/yapılandırılacak)
+- Kullanıcı ekleme-silme kişi yönetimi işlemlerini yapar. 
+- Kullanıcı contact ekleme-silme yönetimi işlemlerini yapar. 
 - Kişi oluşturulduğunda `PersonCreatedEvent` olayı yayınlar.
+- Contact oluşturulduğunda/eklendiğinde  `ContactCreatedEvent` olayı yayınlar.(Yapılacak)
 - Olay yayınlamak için **IPublishEndpoint** (MassTransit) kullanır.
 
 ### 2. **ReportService**
 - **ContactService**'ten gelen olayları dinler (`PersonCreatedEventConsumer`).
 - Gelen olaylara göre rapor verilerini oluşturur ve saklar.
+- PostgreSQL veritabanı kullanır.
+- **BackgroundService** ile rapor işlemlerini asenkron yürütür.
+
+- ### 2+. **ReportService** (2 yerine 2+ olarak; Yapı buraya göre değiştirilecek)
+- **ReportService**'ten gelen olayları **ContactService** dinler (`ReportCreatedEventConsumer`). Üçüncü bir katman düşünülebilir.
+- Rapor verilerini oluşturur ve saklar.
 - PostgreSQL veritabanı kullanır.
 - **BackgroundService** ile rapor işlemlerini asenkron yürütür.
 
