@@ -1,6 +1,8 @@
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
 using ContactService.Domain.Entities;
+using ContactService.Infrastructure.Messaging.Consumers;
+using ContactService.Infrastructure.Messaging.Services;
 using ContactService.Infrastructure.Persistence;
 using ContactService.Infrastructure.Services;
 using FluentValidation;
@@ -41,16 +43,33 @@ builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
 builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person, ContactDb>>();
 builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo, ContactDb>>();
+builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<ReportCreatedEventConsumer>();
 
-// MassTransit with RabbitMQ
+//// MassTransit with RabbitMQ
+//builder.Services.AddMassTransit(x =>
+//{
+//    x.UsingRabbitMq((context, cfg) =>
+//    {
+//        cfg.Host("localhost", "/", h =>
+//        {
+//            h.Username("guest");
+//            h.Password("guest");
+//        });
+//    });
+//});
+
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<ReportCreatedEventConsumer>();
+
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("localhost", "/", h =>
+        cfg.Host("rabbitmq://localhost");
+
+        cfg.ReceiveEndpoint("report-created-queue", e =>
         {
-            h.Username("guest");
-            h.Password("guest");
+            e.ConfigureConsumer<ReportCreatedEventConsumer>(context);
         });
     });
 });

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ContactService.Application.Features.ContactInfo.Commands;
+using ContactService.Application.Interfaces;
 using ContactService.Domain.Entities;
 using MediatR;
 using SharedKernel.Interface;
@@ -10,20 +11,20 @@ namespace ContactService.Application.Features.ContactInfos.Handlers.CommandHandl
 
 public class CreateContactInfoCommandHandler : IRequestHandler<CreateContactInfoCommand, Guid>
 {
-    private readonly IGenericRepository<DomainContactInfo> _contactInfoRepository;
-    private readonly IGenericRepository<Person> _personRepository;
+    private readonly IContactInfoService _contactInfoService;
+    private readonly IPersonService _personService;
     private readonly IMapper _mapper;
 
-    public CreateContactInfoCommandHandler(IGenericRepository<DomainContactInfo> contactInfoRepository, IGenericRepository<Person> personRepository, IMapper mapper)
+    public CreateContactInfoCommandHandler(IContactInfoService contactInfoService, IPersonService personService, IMapper mapper)
     {
-        _contactInfoRepository = contactInfoRepository;
-        _personRepository = personRepository;
+        _contactInfoService = contactInfoService;
+        _personService = personService;
         _mapper = mapper;
     }
 
     public async Task<Guid> Handle(CreateContactInfoCommand request, CancellationToken cancellationToken)
     {
-        var person = await _personRepository.GetByIdAsync(request.PersonId);
+        var person = await _personService.GetByIdAsync(request.PersonId);
         if (person == null)
             throw new KeyNotFoundException("Person not found.");
 
@@ -31,8 +32,8 @@ public class CreateContactInfoCommandHandler : IRequestHandler<CreateContactInfo
 
         contactInfo.Id = Guid.NewGuid(); // Eğer DB kendisi ID üretmiyorsa
 
-        await _contactInfoRepository.AddAsync(contactInfo);
-        await _contactInfoRepository.SaveChangesAsync();
+        await _contactInfoService.AddAsync(contactInfo);
+        await _contactInfoService.SaveChangesAsync();
 
         return contactInfo.Id;
     }

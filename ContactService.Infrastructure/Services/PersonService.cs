@@ -1,18 +1,19 @@
 ﻿using ContactService.Application.DTOs;
 using ContactService.Application.Interfaces;
 using ContactService.Domain.Entities;
-using ContactService.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel.Infrastructure;
+using SharedKernel.Interface;
 
 namespace ContactService.Infrastructure.Services;
 
-public class PersonService : IPersonService
+public class PersonService : GenericService<Person>, IPersonService
 {
-    private readonly ContactDb _context;
+    private readonly IGenericRepository<Person> _personRepository;
 
-    public PersonService(ContactDb context)
+    public PersonService(IGenericRepository<Person> personRepository) : base(personRepository)
     {
-        _context = context;
+        _personRepository = personRepository;
     }
 
     public async Task<Guid> CreatePersonAsync(CreatePersonDto dto)
@@ -24,27 +25,29 @@ public class PersonService : IPersonService
             Company = dto.Company
         };
 
-        await _context.Persons.AddAsync(person);
-        await _context.SaveChangesAsync();
+        await _personRepository.AddAsync(person);
+        await _personRepository.SaveChangesAsync();
 
         return person.Id;
     }
 
     public async Task DeletePersonAsync(Guid id)
     {
-        var person = await _context.Persons.FindAsync(id);
+        var person = await _personRepository.GetByIdAsync(id);
         if (person == null) return;
 
-        _context.Persons.Remove(person);
-        await _context.SaveChangesAsync();
-    }
+        await _personRepository.DeleteAsync(person);
+        await _personRepository.SaveChangesAsync();
+    }   
 
     public async Task<List<PersonDetailDto>> GetAllPersonsAsync()
     {
-        var persons = await _context.Persons
-            .Include(p => p.ContactInfos)
-            .ToListAsync();
+        var persons = await _personRepository
+                .GetWhereAsync(predicate: null, 
+                               include: q => q.Include(p => p.ContactInfos));
 
+        // yapıyı handşe ettikten sonra, burayı sorgu içine model göndererek alacağım.
+        // şu an data çekiliyor sonra mapleniyor. :(
         return persons.Select(p => new PersonDetailDto
         {
             Id = p.Id,
@@ -62,9 +65,10 @@ public class PersonService : IPersonService
 
     public async Task<PersonDetailDto> GetPersonWithContactsAsync(Guid id)
     {
-        var p = await _context.Persons
-            .Include(x => x.ContactInfos)
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var p = await _personRepository.GetByIdAsync(
+            predicate: x => x.Id == id,
+            include: q => q.Include(p => p.ContactInfos)
+        );
 
         if (p == null) return null!;
 

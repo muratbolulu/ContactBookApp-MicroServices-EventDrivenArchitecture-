@@ -1,23 +1,24 @@
 ﻿using ContactService.Application.DTOs;
 using ContactService.Application.Interfaces;
 using ContactService.Domain.Entities;
-using ContactService.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using SharedKernel.Infrastructure;
+using SharedKernel.Interface;
 
 namespace ContactService.Infrastructure.Services;
 
-public class ContactInfoService : IContactInfoService
+public class ContactInfoService : GenericService<ContactInfo>, IContactInfoService
 {
-    private readonly ContactDb _context;
+    private readonly IGenericRepository<ContactInfo> _contactInfoRepository;
 
-    public ContactInfoService(ContactDb context)
+    public ContactInfoService(IGenericRepository<ContactInfo> contactInfoRepository) :base(contactInfoRepository)
     {
-        _context = context;
+        _contactInfoRepository = contactInfoRepository;
     }
 
     public async Task AddContactInfoAsync(AddContactInfoDto dto)
     {
-        var personExists = await _context.Persons.AnyAsync(p => p.Id == dto.PersonId);
+        var personExists = await _contactInfoRepository.AnyAsync(p => p.Id == dto.PersonId);
+
         if (!personExists)
             throw new ArgumentException("Person not found");
 
@@ -28,16 +29,16 @@ public class ContactInfoService : IContactInfoService
             Value = dto.Value
         };
 
-        await _context.ContactInfos.AddAsync(contactInfo);
-        await _context.SaveChangesAsync();
+        await _contactInfoRepository.AddAsync(contactInfo);
+        await _contactInfoRepository.SaveChangesAsync();
     }
 
     public async Task RemoveContactInfoAsync(Guid contactInfoId)
     {
-        var contactInfo = await _context.ContactInfos.FindAsync(contactInfoId);
+        var contactInfo = await _contactInfoRepository.GetByIdAsync(contactInfoId);
         if (contactInfo == null) return;
 
-        _context.ContactInfos.Remove(contactInfo);
-        await _context.SaveChangesAsync();
+        await _contactInfoRepository.DeleteAsync(contactInfo);
+        await _contactInfoRepository.SaveChangesAsync();
     }
 }

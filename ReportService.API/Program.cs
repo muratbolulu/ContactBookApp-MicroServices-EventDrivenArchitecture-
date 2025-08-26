@@ -1,8 +1,8 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using ReportService.Application.Features.Reports.Consumers;
 using ReportService.Application.Mappings;
 using ReportService.Domain.Entities;
-using ReportService.Infrastructure.EventHandlers;
 using ReportService.Infrastructure.NewFolder.Services;
 using ReportService.Infrastructure.Persistence;
 using SharedKernel.Infrastructure;
@@ -39,22 +39,36 @@ builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report,
 // Hosted Service
 builder.Services.AddHostedService<ReportBackgroundService>();
 
-// MassTransit + RabbitMQ
-builder.Services.AddMassTransit(x =>
+//// MassTransit + RabbitMQ
+//builder.Services.AddMassTransit(x =>
+//{
+//    x.AddConsumer<PersonCreatedEventConsumer>();
+
+//    x.UsingRabbitMq((context, cfg) =>
+//    {
+//        cfg.Host("localhost", "/", h => { });
+
+//        cfg.ReceiveEndpoint("person-created-event-queue", e =>
+//        {
+//            e.ConfigureConsumer<PersonCreatedEventConsumer>(context);
+//        });
+//    });
+//});
+
+builder.Services.AddMassTransit(cfg =>
 {
-    x.AddConsumer<PersonCreatedEventConsumer>();
+    cfg.AddConsumer<ReportContactsPreparedConsumer>();
 
-    x.UsingRabbitMq((context, cfg) =>
+    cfg.UsingRabbitMq((context, config) =>
     {
-        cfg.Host("localhost", "/", h => { });
+        config.Host("rabbitmq://localhost");
 
-        cfg.ReceiveEndpoint("person-created-event-queue", e =>
+        config.ReceiveEndpoint("report-contacts-prepared-queue", e =>
         {
-            e.ConfigureConsumer<PersonCreatedEventConsumer>(context);
+            e.ConfigureConsumer<ReportContactsPreparedConsumer>(context);
         });
     });
 });
-
 
 var app = builder.Build();
 

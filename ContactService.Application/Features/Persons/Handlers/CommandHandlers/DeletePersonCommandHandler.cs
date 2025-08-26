@@ -1,27 +1,26 @@
 ﻿using ContactService.Application.Features.Persons.Commands;
-using ContactService.Domain.Entities;
+using ContactService.Application.Interfaces;
 using MediatR;
-using SharedKernel.Interface;
 
 namespace ContactService.Application.Features.Persons.Handlers.CommandHandlers;
 
 public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, bool>
 {
-    private readonly IGenericRepository<Person> _personRepository;
+    private readonly IPersonService _personService;
 
-    public DeletePersonCommandHandler(IGenericRepository<Person> personRepository)
+    public DeletePersonCommandHandler(IPersonService personService)
     {
-        _personRepository = personRepository;
+        _personService = personService;
     }
 
     public async Task<bool> Handle(DeletePersonCommand request, CancellationToken cancellationToken)
     {
-        var person = await _personRepository.GetByIdAsync(request.Id);
+        var person = await _personService.GetByIdAsync(request.Id);
         if (person == null)
             return false;
 
-        await _personRepository.DeleteAsync(person);
-        await _personRepository.SaveChangesAsync();
+        await _personService.DeleteAsync(person);
+        await _personService.SaveChangesAsync();
 
         return true;
     }

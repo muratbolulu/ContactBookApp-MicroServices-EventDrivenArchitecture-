@@ -5,7 +5,7 @@ using ReportService.Application.Features.Reports.Queries;
 using ReportService.Domain.Entities;
 using SharedKernel.Interface;
 
-namespace ReportService.Application.Features.Reports.Handlers.Queries;
+namespace ReportService.Application.Features.Reports.Handlers.QueryHandlers;
 
 public class GetReportByIdQueryHandler : IRequestHandler<GetReportByIdQuery, ReportDto>
 {

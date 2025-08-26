@@ -10,16 +10,13 @@ namespace ContactService.Application.Features.Persons.Handlers.CommandHandlers;
 
 public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, Guid>
 {
-    private readonly IGenericRepository<Person> _personRepository;
+    private readonly IGenericService<Person> _personService;
     private readonly IMapper _mapper;
-    private readonly IPublishEndpoint _publishEndpoint;
-    public const string PersonCreated = "person-created-queue";
 
-    public CreatePersonCommandHandler(IGenericRepository<Person> personRepository, IMapper mapper, IPublishEndpoint publishEndpoint)
+    public CreatePersonCommandHandler(IGenericService<Person> personService, IMapper mapper)
     {
-        _personRepository = personRepository;
+        _personService = personService;
         _mapper = mapper;
-        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<Guid> Handle(CreatePersonCommand request, CancellationToken cancellationToken)
@@ -27,17 +24,8 @@ public class CreatePersonCommandHandler : IRequestHandler<CreatePersonCommand, G
         var person = _mapper.Map<Person>(request);
         person.Id = Guid.NewGuid();
 
-        await _personRepository.AddAsync(person);
-        await _personRepository.SaveChangesAsync();
-
-        var @event = new PersonCreatedEvent(
-            person.Id,
-            $"{person.FirstName} {person.LastName}",
-            DateTime.UtcNow
-        );
-
-
-        await _publishEndpoint.Publish(@event);
+        await _personService.AddAsync(person);
+        await _personService.SaveChangesAsync();
 
         return person.Id;
     }
