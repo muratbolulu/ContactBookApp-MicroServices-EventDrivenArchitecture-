@@ -13,6 +13,7 @@ public class ReportService : IReportService
 
     public Task UpdateReportContactsAsync(Guid reportId, List<ContactDto> contacts, string location)
     {
+        //burası doldurulacak
         throw new NotImplementedException();
     }
 }

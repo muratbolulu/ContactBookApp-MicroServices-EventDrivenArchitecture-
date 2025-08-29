@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ContactService.Application.Features.Persons.Commands;
+using ContactService.Application.Interface;
 using ContactService.Domain.Entities;
 using MediatR;
-using SharedKernel.Interface;
 
 namespace ContactService.Application.Features.Persons.Handlers.CommandHandlers;
 

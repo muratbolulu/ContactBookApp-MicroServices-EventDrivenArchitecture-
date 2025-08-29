@@ -11,7 +11,7 @@ using ReportService.Infrastructure.Persistence;
 
 namespace ReportService.Infrastructure.Migrations
 {
-    [DbContext(typeof(ReportDb))]
+    [DbContext(typeof(ReportDbContext))]
     [Migration("20250813223502_initial")]
     partial class initial
     {

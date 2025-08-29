@@ -1,12 +1,19 @@
-﻿using ReportService.Domain.Entities;
+﻿using ReportService.Application.Interfaces;
+using ReportService.Domain.Entities;
 using ReportService.Infrastructure.Persistence;
-using SharedKernel.Infrastructure;
+using ReportService.Infrastructure.Persistence.Repositories;
+using SharedKernel.Events.Reports;
 
 namespace ReportService.Infrastructure.Repositories;
 
-public class ReportRepository : GenericRepository<Report, ReportDb>, IReportRepository
+public class ReportRepository : GenericRepository<Report>, IReportRepository
 {
-    public ReportRepository(ReportDb context) : base(context)
+    public ReportRepository(ReportDbContext context) : base(context)
     {
+    }
+
+    public Task UpdateReportContactsAsync(Guid reportId, List<ContactDto> contacts, string location)
+    {
+        throw new NotImplementedException();
     }
 }

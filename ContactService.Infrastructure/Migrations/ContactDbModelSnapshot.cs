@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ContactService.Infrastructure.Migrations
 {
-    [DbContext(typeof(ContactDb))]
+    [DbContext(typeof(ContactDbContext))]
     partial class ContactDbModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

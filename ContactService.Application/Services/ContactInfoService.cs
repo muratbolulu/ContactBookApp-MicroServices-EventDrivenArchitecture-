@@ -1,16 +1,14 @@
 ﻿using ContactService.Application.DTOs;
 using ContactService.Application.Interfaces;
 using ContactService.Domain.Entities;
-using SharedKernel.Infrastructure;
-using SharedKernel.Interface;
 
-namespace ContactService.Infrastructure.Services;
+namespace ContactService.Application.Services;
 
 public class ContactInfoService : GenericService<ContactInfo>, IContactInfoService
 {
-    private readonly IGenericRepository<ContactInfo> _contactInfoRepository;
+    private readonly IContactInfoRepository _contactInfoRepository;
 
-    public ContactInfoService(IGenericRepository<ContactInfo> contactInfoRepository) :base(contactInfoRepository)
+    public ContactInfoService(IContactInfoRepository contactInfoRepository) : base(contactInfoRepository)
     {
         _contactInfoRepository = contactInfoRepository;
     }
@@ -41,4 +39,10 @@ public class ContactInfoService : GenericService<ContactInfo>, IContactInfoServi
         await _contactInfoRepository.DeleteAsync(contactInfo);
         await _contactInfoRepository.SaveChangesAsync();
     }
+
+    public async Task<List<ContactInfo>> GetContactsByLocationAsync(string location)
+    {
+        return await _contactInfoRepository.GetContactsByLocationAsync(location);
+    }
 }
+

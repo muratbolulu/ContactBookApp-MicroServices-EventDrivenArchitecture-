@@ -1,12 +1,12 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ReportService.Application.Features.Reports.Consumers;
+using ReportService.Application.Interfaces;
 using ReportService.Application.Mappings;
 using ReportService.Domain.Entities;
 using ReportService.Infrastructure.NewFolder.Services;
 using ReportService.Infrastructure.Persistence;
-using SharedKernel.Infrastructure;
-using SharedKernel.Interface;
+using ReportService.Infrastructure.Persistence.Repositories;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // DbContext
-builder.Services.AddDbContext<ReportDb>(options =>
+builder.Services.AddDbContext<ReportDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         b => b.MigrationsAssembly("ReportService.Infrastructure") // Migration dosyalarýný buraya ekle
@@ -34,7 +34,8 @@ builder.Services.AddAutoMapper(cfg =>
 });
 
 // Repository
-builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report, ReportDb>>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report>>();
 
 // Hosted Service
 builder.Services.AddHostedService<ReportBackgroundService>();

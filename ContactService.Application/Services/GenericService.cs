@@ -1,7 +1,8 @@
-﻿using SharedKernel.Interface;
+﻿using ContactService.Application.Interface;
+using ContactService.Application.Interfaces;
 using System.Linq.Expressions;
 
-namespace SharedKernel.Infrastructure;
+namespace ContactService.Application.Services;
 
 public class GenericService<T> : IGenericService<T> where T : class
 {
@@ -13,7 +14,7 @@ public class GenericService<T> : IGenericService<T> where T : class
     }
 
     public async Task<T?> GetByIdAsync(Guid id) => await _repository.GetByIdAsync(id);
-    public async Task<T?> GetByIdAsync(Expression<Func<T, bool>> predicate = null, 
+    public async Task<T?> GetByIdAsync(Expression<Func<T, bool>> predicate = null,
                                  Func<IQueryable<T>, IQueryable<T>> include = null)
     {
         return await _repository.GetByIdAsync(predicate, include);
@@ -25,7 +26,7 @@ public class GenericService<T> : IGenericService<T> where T : class
     {
         return await _repository.GetWhereAsync(predicate);
     }
-    public async Task<IReadOnlyList<T>> GetWhereAsync(Expression<Func<T, bool>> predicate, 
+    public async Task<IReadOnlyList<T>> GetWhereAsync(Expression<Func<T, bool>> predicate,
                                                       Func<IQueryable<T>, IQueryable<T>> include = null)
     {
         return await _repository.GetWhereAsync(predicate, include);

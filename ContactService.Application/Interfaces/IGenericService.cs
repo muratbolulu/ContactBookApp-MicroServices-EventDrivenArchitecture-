@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace SharedKernel.Interface;
+namespace ContactService.Application.Interface;
 
 public interface IGenericService<T> where T : class
 {

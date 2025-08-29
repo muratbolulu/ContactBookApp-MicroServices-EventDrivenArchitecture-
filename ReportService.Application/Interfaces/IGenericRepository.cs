@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace SharedKernel.Interface;
+namespace ReportService.Application.Interfaces;
 
 public interface IGenericRepository<T> where T : class
 {

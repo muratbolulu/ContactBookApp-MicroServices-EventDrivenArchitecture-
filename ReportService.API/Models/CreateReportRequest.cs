@@ -5,5 +5,5 @@ public class CreateReportRequest
     // Raporun hazırlanacağı lokasyon
     public string Location { get; set; } = string.Empty;
 
-    // public Guid RequestedByUserId { get; set; }
+    // public Guid RequestedByUserId { get; set; } //belki..
 }

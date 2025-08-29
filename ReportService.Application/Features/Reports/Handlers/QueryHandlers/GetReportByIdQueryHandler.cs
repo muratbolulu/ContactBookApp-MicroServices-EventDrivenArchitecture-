@@ -2,8 +2,8 @@
 using MediatR;
 using ReportService.Application.DTOs;
 using ReportService.Application.Features.Reports.Queries;
+using ReportService.Application.Interfaces;
 using ReportService.Domain.Entities;
-using SharedKernel.Interface;
 
 namespace ReportService.Application.Features.Reports.Handlers.QueryHandlers;
 

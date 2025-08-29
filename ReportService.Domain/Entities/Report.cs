@@ -8,6 +8,7 @@ public class Report
     public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
     public string Location { get; set; } // tekrar dönülecek
     public ReportStatus Status { get; set; } = ReportStatus.Pending;
-    public string FilePath { get; set; }
-    public string? Content { get; set; }
+
+    public List<ReportContact> Contacts { get; set; } = new();
+
 }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ReportService.Application.Interfaces;
 using ReportService.Domain.Entities;
 using ReportService.Domain.Enums;
-using SharedKernel.Interface;
 using System.Text.Json;
 
 namespace ReportService.Infrastructure.NewFolder.Services;
@@ -26,7 +26,7 @@ public class ReportBackgroundService : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             using var scope = _serviceProvider.CreateScope();
-            var reportRepository = scope.ServiceProvider.GetRequiredService<IGenericRepository<Report>>();
+            var reportRepository = scope.ServiceProvider.GetRequiredService<IReportRepository>();
 
             var pendingReports = await reportRepository.GetWhereAsync(r => r.Status == ReportStatus.Pending);
 
@@ -40,7 +40,7 @@ public class ReportBackgroundService : BackgroundService
                     PhoneCount = new Random().Next(1, 100)
                 };
 
-                report.Content = JsonSerializer.Serialize(reportData);
+                //report.Content = JsonSerializer.Serialize(reportData);
                 report.Status = ReportStatus.Completed;
 
                 await reportRepository.UpdateAsync(report);

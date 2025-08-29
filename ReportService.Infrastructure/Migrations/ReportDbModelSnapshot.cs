@@ -10,7 +10,7 @@ using ReportService.Infrastructure.Persistence;
 
 namespace ReportService.Infrastructure.Migrations
 {
-    [DbContext(typeof(ReportDb))]
+    [DbContext(typeof(ReportDbContext))]
     partial class ReportDbModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

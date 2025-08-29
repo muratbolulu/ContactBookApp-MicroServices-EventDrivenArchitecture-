@@ -1,22 +1,21 @@
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
+using ContactService.Application.Services;
 using ContactService.Domain.Entities;
 using ContactService.Infrastructure.Messaging.Consumers;
 using ContactService.Infrastructure.Messaging.Services;
 using ContactService.Infrastructure.Persistence;
-using ContactService.Infrastructure.Services;
+using ContactService.Infrastructure.Persistence.Repositories;
 using FluentValidation;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.Infrastructure;
-using SharedKernel.Interface;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // DbContext
-builder.Services.AddDbContext<ContactDb>(options =>
+builder.Services.AddDbContext<ContactDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
          b => b.MigrationsAssembly("ContactService.Infrastructure") // Migration dosyalarýný buraya ekle
@@ -41,8 +40,8 @@ builder.Services.AddMediatR(cfg =>
 // Application Services
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IContactInfoService, ContactInfoService>();
-builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person, ContactDb>>();
-builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo, ContactDb>>();
+builder.Services.AddScoped<IGenericRepository<Person>, GenericRepository<Person>>(); //generic hal için tekrar bakýlacak
+builder.Services.AddScoped<IGenericRepository<ContactInfo>, GenericRepository<ContactInfo>>();  //generic hal için tekrar bakýlacak
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<ReportCreatedEventConsumer>();
 

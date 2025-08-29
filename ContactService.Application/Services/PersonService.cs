@@ -1,11 +1,10 @@
 ﻿using ContactService.Application.DTOs;
 using ContactService.Application.Interfaces;
+using ContactService.Application.Services;
 using ContactService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.Infrastructure;
-using SharedKernel.Interface;
 
-namespace ContactService.Infrastructure.Services;
+namespace ContactService.Application.Services;
 
 public class PersonService : GenericService<Person>, IPersonService
 {
@@ -38,12 +37,12 @@ public class PersonService : GenericService<Person>, IPersonService
 
         await _personRepository.DeleteAsync(person);
         await _personRepository.SaveChangesAsync();
-    }   
+    }
 
     public async Task<List<PersonDetailDto>> GetAllPersonsAsync()
     {
         var persons = await _personRepository
-                .GetWhereAsync(predicate: null, 
+                .GetWhereAsync(predicate: null,
                                include: q => q.Include(p => p.ContactInfos));
 
         // yapıyı handşe ettikten sonra, burayı sorgu içine model göndererek alacağım.

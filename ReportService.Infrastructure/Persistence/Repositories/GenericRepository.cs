@@ -1,20 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SharedKernel.Interface;
+using ReportService.Application.Interfaces;
 using System.Linq.Expressions;
 
-namespace SharedKernel.Infrastructure;
+namespace ReportService.Infrastructure.Persistence.Repositories;
 
-public class GenericRepository<T, TContext> : IGenericRepository<T>
+public class GenericRepository<T> : IGenericRepository<T>
     where T : class
-    where TContext : DbContext
 {
-    protected readonly TContext _context;
+    private readonly ReportDbContext _context;
     private readonly DbSet<T> _dbSet;
 
-    public GenericRepository(TContext context)
+    public GenericRepository(ReportDbContext context)
     {
         _context = context;
-        _dbSet = context.Set<T>();
+        _dbSet = _context.Set<T>();
     }
 
     public async Task<T?> GetByIdAsync(Guid id) => await _dbSet.FindAsync(id);

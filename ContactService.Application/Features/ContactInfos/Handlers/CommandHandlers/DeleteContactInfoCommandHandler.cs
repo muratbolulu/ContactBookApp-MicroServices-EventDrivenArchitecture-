@@ -1,7 +1,7 @@
 ﻿using ContactService.Application.Features.ContactInfos.Commands;
+using ContactService.Application.Interfaces;
 using MediatR;
-using SharedKernel.Interface;
-using ContactInfosLocal= ContactService.Domain.Entities.ContactInfo; //neden görmediğini kontrol edeceğim.
+using ContactInfosLocal = ContactService.Domain.Entities.ContactInfo; //neden görmediğini kontrol edeceğim.
 
 namespace ContactService.Application.Features.ContactInfos.Handlers.CommandHandlers
 {

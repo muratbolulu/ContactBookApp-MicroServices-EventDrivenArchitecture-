@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using ReportService.Application.Interfaces;
 using SharedKernel.Events.Reports;
 
 namespace ReportService.Application.Features.Reports.Consumers;
