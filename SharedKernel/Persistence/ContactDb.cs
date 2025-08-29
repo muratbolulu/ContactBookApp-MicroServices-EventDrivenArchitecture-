@@ -17,11 +17,5 @@ public class ContactDb : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ContactDb).Assembly);
         base.OnModelCreating(modelBuilder);
     }
-
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseLazyLoadingProxies();
-    //    base.OnConfiguring(optionsBuilder);
-    //}
 }
 

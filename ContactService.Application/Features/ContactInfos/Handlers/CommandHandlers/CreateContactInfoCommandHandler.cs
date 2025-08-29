@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using ContactService.Application.Features.ContactInfo.Commands;
 using ContactService.Application.Interfaces;
-using ContactService.Domain.Entities;
 using MediatR;
-using SharedKernel.Interface;
 using DomainContactInfo = ContactService.Domain.Entities.ContactInfo;
 
 

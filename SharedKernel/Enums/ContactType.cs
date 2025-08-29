@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SharedKernel.Enums;
 
-namespace SharedKernel.Enums
+public class ContactType
 {
-    internal class ContactType
-    {
-    }
 }

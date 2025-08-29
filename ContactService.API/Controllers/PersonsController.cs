@@ -1,9 +1,7 @@
 ﻿using ContactService.Application.Features.Persons.Commands;
 using ContactService.Application.Features.Persons.Queries;
-using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace ContactService.API.Controllers;
 

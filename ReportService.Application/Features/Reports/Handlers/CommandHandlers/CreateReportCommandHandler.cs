@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using MassTransit;
+﻿using MassTransit;
 using MediatR;
 using ReportService.Application.Features.Reports.Commands;
-using ReportService.Domain.Entities;
-using ReportService.Domain.Enums;
 using SharedKernel.Events.Reports;
-using SharedKernel.Interface;
 
 namespace ReportService.Application.Features.Reports.Handlers.CommandHandlers;
 public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, Guid>

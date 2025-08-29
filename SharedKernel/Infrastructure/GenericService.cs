@@ -3,8 +3,7 @@ using System.Linq.Expressions;
 
 namespace SharedKernel.Infrastructure;
 
-public class GenericService<T> : IGenericService<T>
-    where T : class
+public class GenericService<T> : IGenericService<T> where T : class
 {
     private readonly IGenericRepository<T> _repository;
 

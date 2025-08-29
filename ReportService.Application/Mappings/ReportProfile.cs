@@ -2,13 +2,12 @@
 using ReportService.Application.Features.Reports.Commands;
 using ReportService.Domain.Entities;
 
-namespace ReportService.Application.Mappings
+namespace ReportService.Application.Mappings;
+
+public class ReportProfile : Profile
 {
-    public class ReportProfile : Profile
+    public ReportProfile()
     {
-        public ReportProfile()
-        {
-            CreateMap<CreateReportCommand, Report>();
-        }
+        CreateMap<CreateReportCommand, Report>();
     }
 }

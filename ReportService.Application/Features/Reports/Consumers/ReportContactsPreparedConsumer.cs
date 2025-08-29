@@ -1,30 +1,29 @@
 ﻿using MassTransit;
 using SharedKernel.Events.Reports;
 
-namespace ReportService.Application.Features.Reports.Consumers
+namespace ReportService.Application.Features.Reports.Consumers;
+
+public class ReportContactsPreparedConsumer : IConsumer<ReportContactsPreparedEvent>
 {
-    public class ReportContactsPreparedConsumer : IConsumer<ReportContactsPreparedEvent>
+    private readonly IReportRepository _reportRepository;
+
+    public ReportContactsPreparedConsumer(IReportRepository reportRepository)
     {
-        private readonly IReportRepository _reportRepository;
+        _reportRepository = reportRepository;
+    }
 
-        public ReportContactsPreparedConsumer(IReportRepository reportRepository)
-        {
-            _reportRepository = reportRepository;
-        }
+    public async Task Consume(ConsumeContext<ReportContactsPreparedEvent> context)
+    {
+        var message = context.Message;
 
-        public async Task Consume(ConsumeContext<ReportContactsPreparedEvent> context)
-        {
-            var message = context.Message;
+        // Burada raporu güncelle veya veriyi DB'ye kaydet
+        // Örneğin, Report entity'sine kişi listesini ekle
+        await _reportRepository.UpdateReportContactsAsync(
+            message.ReportId,
+            message.Contacts,
+            message.Location
+        );
 
-            // Burada raporu güncelle veya veriyi DB'ye kaydet
-            // Örneğin, Report entity'sine kişi listesini ekle
-            await _reportRepository.UpdateReportContactsAsync(
-                message.ReportId,
-                message.Contacts,
-                message.Location
-            );
-
-            // İstersen log yazabilir veya başka bir event tetikleyebilirsin
-        }
+        // İstersen log yazabilir veya başka bir event tetikleyebilirsin
     }
 }

@@ -1,5 +1,4 @@
-﻿using ContactService.Application.DTOs;
-using ContactService.Application.Features.Persons.Commands;
+﻿using ContactService.Application.Features.Persons.Commands;
 using FluentValidation;
 
 namespace ContactService.Application.Validators;
