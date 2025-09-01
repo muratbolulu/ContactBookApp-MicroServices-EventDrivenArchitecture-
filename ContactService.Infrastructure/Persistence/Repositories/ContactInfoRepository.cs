@@ -7,7 +7,7 @@ namespace ContactService.Infrastructure.Persistence.Repositories;
 
 public class ContactInfoRepository : GenericRepository<ContactInfo>, IContactInfoRepository
 {
-    public ContactInfoRepository(DbContext context) : base(context)
+    public ContactInfoRepository(ContactDbContext context) : base(context)
     {
     }
 

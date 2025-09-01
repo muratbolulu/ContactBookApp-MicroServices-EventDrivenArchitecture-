@@ -4,13 +4,12 @@ using System.Linq.Expressions;
 
 namespace ContactService.Infrastructure.Persistence.Repositories;
 
-public class GenericRepository<T> : IGenericRepository<T>
-    where T : class
+public class GenericRepository<T> : IGenericRepository<T>  where T : class
 {
     private readonly DbSet<T> _dbSet;
-    private readonly DbContext _context;
+    private readonly ContactDbContext _context;
 
-    public GenericRepository(DbContext context)
+    public GenericRepository(ContactDbContext context)
     {
         _context = context;
         _dbSet = _context.Set<T>();

@@ -5,8 +5,7 @@ namespace ContactService.Infrastructure.Persistence;
 
 public class ContactDbContext : DbContext
 {
-    public ContactDbContext(DbContextOptions<ContactDbContext> options)
-        : base(options) { }
+    public ContactDbContext(DbContextOptions<ContactDbContext> options) : base(options) { }
 
     public DbSet<Person> Persons => Set<Person>();
     public DbSet<ContactInfo> ContactInfos => Set<ContactInfo>();
