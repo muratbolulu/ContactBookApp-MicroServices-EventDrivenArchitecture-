@@ -28,7 +28,7 @@ public class CreateContactInfoCommandHandler : IRequestHandler<CreateContactInfo
 
         var contactInfo = _mapper.Map<DomainContactInfo>(request);
 
-        contactInfo.Id = Guid.NewGuid(); // Eğer DB kendisi ID üretmiyorsa
+        contactInfo.Id = Guid.NewGuid(); // biz üretip verdik.
 
         await _contactInfoService.AddAsync(contactInfo);
         await _contactInfoService.SaveChangesAsync();

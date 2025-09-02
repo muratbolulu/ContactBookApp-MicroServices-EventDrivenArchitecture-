@@ -45,7 +45,7 @@ public class PersonService : GenericService<Person>, IPersonService
                 .GetWhereAsync(predicate: null,
                                include: q => q.Include(p => p.ContactInfos));
 
-        // yapıyı handşe ettikten sonra, burayı sorgu içine model göndererek alacağım.
+        // yapıyı handle ettikten sonra, burayı sorgu içine model göndererek alacağım.
         // şu an data çekiliyor sonra mapleniyor. :(
         return persons.Select(p => new PersonDetailDto
         {

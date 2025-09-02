@@ -22,14 +22,9 @@ public class ReportRequestedEventConsumer : IConsumer<ReportRequestedEvent>
     {
         var message = context.Message;
 
-        //Console.WriteLine($"Report requested for location: {context.Message.Location}");
-
         // Lokasyona göre Contact bilgilerini çek
         var contacts = await _contactInfoService.GetContactsByLocationAsync(message.Location);
 
-        //Console.WriteLine($"Found {contacts.Count} contacts");
-
-        // DTO'ya dönüştür
         var contactDtos = contacts.Select(c => new ContactDto
         {
             ContactId = c.Id,
@@ -46,7 +41,6 @@ public class ReportRequestedEventConsumer : IConsumer<ReportRequestedEvent>
             Contacts = contactDtos
         };
 
-        // Event'i publish et
         await _publishEndpoint.Publish(responseEvent);
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ReportService.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using ReportService.Infrastructure.Persistence;
 namespace ReportService.Infrastructure.Migrations
 {
     [DbContext(typeof(ReportDbContext))]
-    partial class ReportDbModelSnapshot : ModelSnapshot
+    [Migration("20250902215122_RemoveFilePathFromReport")]
+    partial class RemoveFilePathFromReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +33,6 @@ namespace ReportService.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CompletedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("text");
 
                     b.Property<string>("Location")
                         .IsRequired()

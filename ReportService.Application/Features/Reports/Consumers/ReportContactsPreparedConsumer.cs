@@ -17,14 +17,15 @@ public class ReportContactsPreparedConsumer : IConsumer<ReportContactsPreparedEv
     {
         var message = context.Message;
 
-        // Burada raporu güncelle veya veriyi DB'ye kaydet
-        // Örneğin, Report entity'sine kişi listesini ekle
+        var report = await _reportRepository.GetByIdAsync(message.ReportId);
+        if (report == null) return;
+
         await _reportRepository.UpdateReportContactsAsync(
             message.ReportId,
             message.Contacts,
             message.Location
         );
 
-        // İstersen log yazabilir veya başka bir event tetikleyebilirsin
+        await _reportRepository.UpdateAsync(report);
     }
 }

@@ -19,18 +19,6 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-////test services
-var sp = builder.Services.BuildServiceProvider();
-//try
-//{
-//    sp.GetRequiredService<IMediator>();
-//}
-//catch (Exception ex)
-//{
-//    Console.WriteLine("DI Resolve Error: " + ex);
-//}
-////test services
-
 // DbContext
 builder.Services.AddDbContext<ContactDbContext>(options =>
     options.UseNpgsql(

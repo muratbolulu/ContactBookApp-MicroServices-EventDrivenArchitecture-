@@ -3,7 +3,7 @@
 namespace ContactService.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")] // API için /Error olarak ayarlandı, bu yüzden api/Error değil, /Error
+    [Route("[controller]")] 
     public class ErrorController : ControllerBase
     {
         private readonly ILogger<ErrorController> _logger;

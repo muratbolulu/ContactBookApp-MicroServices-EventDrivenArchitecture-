@@ -11,9 +11,5 @@ public class PersonProfile : Profile
     {
         CreateMap<Person, PersonDetailDto>();
         CreateMap<CreatePersonCommand, Person>();
-        //CreateMap<PersonDetailDto, Person>();
-        //CreateMap<ContactInfo, ContactInfoDto>();
-
-        //CreateMap<CreatePersonCommand, Person>();
     }
 }

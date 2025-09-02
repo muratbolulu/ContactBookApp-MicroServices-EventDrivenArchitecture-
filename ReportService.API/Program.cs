@@ -52,7 +52,7 @@ builder.Services.AddMassTransit(cfg =>
 
     cfg.UsingRabbitMq((context, config) =>
     {
-        //config.Host("rabbitmq://localhost");
+        //config.Host("rabbitmq://localhost");  // alternatif kullaným.
 
         config.Host("localhost", "/", h =>
         {

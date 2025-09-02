@@ -18,7 +18,6 @@ public class ReportCreatedEventConsumer : IConsumer<ReportCreatedEvent>
     {
         var message = context.Message;
 
-        // Örnek: ReportService üzerinden bir işlem
         await _reportService.HandleReportCreatedAsync(message.ReportId, message.Title, message.CreatedAt);
     }
 }

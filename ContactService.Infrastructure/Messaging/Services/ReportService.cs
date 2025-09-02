@@ -10,10 +10,4 @@ public class ReportService : IReportService
         Console.WriteLine($"Report received: {reportId}, {title}");
         return Task.CompletedTask;
     }
-
-    public Task UpdateReportContactsAsync(Guid reportId, List<ContactDto> contacts, string location)
-    {
-        //burası doldurulacak
-        throw new NotImplementedException();
-    }
 }

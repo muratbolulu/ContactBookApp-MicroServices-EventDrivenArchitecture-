@@ -25,7 +25,7 @@ public class ContactInfoRepository : GenericRepository<ContactInfo>, IContactInf
         // 2. Bu kişilerin telefon bilgilerini al
         var phones = await _context.ContactInfos
             .Where(c => c.Type == ContactType.Phone && personsInLocation.Contains(c.PersonId))
-            .Include(c => c.Person) // istersen kişi bilgileri de gelsin
+            .Include(c => c.Person) // şu an Eager loading //Lazy Loading yapılırsa buna gerek yok.
             .ToListAsync();
 
         return phones;

@@ -2,49 +2,38 @@
 using ReportService.Application.Interfaces;
 using ReportService.Domain.Entities;
 using SharedKernel.Events.Reports;
+using System.Text.Json;
 
-namespace ReportService.Infrastructure.Persistence.Repositories
+namespace ReportService.Infrastructure.Persistence.Repositories;
+
+public class ReportRepository : GenericRepository<Report>, IReportRepository
 {
-    public class ReportRepository : GenericRepository<Report>, IReportRepository
+    private readonly ReportDbContext _context;
+
+    public ReportRepository(ReportDbContext context) : base(context)
     {
-        private readonly ReportDbContext _context;
+        _context = context;
+    }
 
-        public ReportRepository(ReportDbContext context):base(context)
+    public async Task UpdateReportContactsAsync(Guid reportId, List<ContactDto> contacts, string location)
+    {
+        // Raporu DB'den çek
+        var report = await _context.Reports.FirstOrDefaultAsync(r => r.Id == reportId);
+        if (report == null)
+            throw new InvalidOperationException($"Report with ID {reportId} not found.");
+
+        // Contacts listesini JSON olarak Content alanına yaz
+        var json = JsonSerializer.Serialize(new
         {
-            _context = context;
-        }
+            Location = location,
+            Contacts = contacts
+        });
 
-        public async Task UpdateReportContactsAsync(Guid reportId, List<ContactDto> contacts, string location)
-        {
-            var report = await _context.Reports
-                .Include(r => r.Contacts)
-                .FirstOrDefaultAsync(r => r.Id == reportId);
+        report.Content = json;
+        report.Status = Domain.Enums.ReportStatus.Completed;
+        report.CompletedAt = DateTime.UtcNow;
 
-            if (report == null)
-            {
-                // Yeni rapor oluştur
-                report = new Report
-                {
-                    Id = reportId,
-                    Location = location,
-                };
-                _context.Reports.Add(report);
-            }
-
-            // Eski contact’ları temizle
-            report.Contacts.Clear();
-
-            // Yeni contact’ları ekle
-            report.Contacts.AddRange(contacts.Select(c => new ReportContact
-            {
-                ContactId = c.ContactId,
-                FullName = c.FullName,
-                Email = c.Email,
-                Phone = c.Phone,
-                ReportId = report.Id
-            }));
-
-            await _context.SaveChangesAsync();
-        }
+        _context.Reports.Update(report);
+        await _context.SaveChangesAsync();
     }
 }

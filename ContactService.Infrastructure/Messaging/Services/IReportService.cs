@@ -6,6 +6,4 @@ public interface IReportService
 {
     Task HandleReportCreatedAsync(int reportId, string title, DateTime createdAt);
 
-    Task UpdateReportContactsAsync(Guid reportId, List<ContactDto> contacts, string location);
-
 }

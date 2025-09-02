@@ -8,8 +8,6 @@ public class ContactInfoProfile : Profile
 {
     public ContactInfoProfile()
     {
-        //CreateMap<CreateContactInfoCommand, ContactInfo>();
-
         CreateMap<CreateContactInfoCommand, ContactInfo>()
             .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value))
             .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.InfoType)); // enum -> enum
