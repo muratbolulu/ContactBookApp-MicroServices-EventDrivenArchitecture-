@@ -1,4 +1,5 @@
 using ContactService.Application.Features.Persons.Handlers.QueryHandlers;
+using ContactService.Application.Features.Reports.Consumers;
 using ContactService.Application.Interface;
 using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
@@ -12,6 +13,7 @@ using FluentValidation;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -67,7 +69,7 @@ builder.Services.AddScoped<ReportCreatedEventConsumer>(); // ??
 //// MassTransit with RabbitMQ
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<ReportCreatedEventConsumer>();
+    x.AddConsumer<ReportRequestedEventConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -77,9 +79,9 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
 
-        cfg.ReceiveEndpoint("report-created-queue", e =>
+        cfg.ReceiveEndpoint("report-contacts-prepared-queue", e =>
         {
-            e.ConfigureConsumer<ReportCreatedEventConsumer>(context);
+            e.ConfigureConsumer<ReportRequestedEventConsumer>(context);
         });
     });
 });
@@ -94,7 +96,10 @@ builder.Services.AddControllers()
 );
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ContactService API", Version = "v1" });
+});
 
 var app = builder.Build();
 
@@ -102,21 +107,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-    //app.UseSwagger();
-    //app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
-}
-
-
-// Middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

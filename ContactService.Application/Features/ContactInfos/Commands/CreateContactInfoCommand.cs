@@ -1,5 +1,5 @@
-﻿using ContactService.Domain.Enums;
-using MediatR;
+﻿using MediatR;
+using SharedKernel.Enums;
 
 namespace ContactService.Application.Features.ContactInfo.Commands;
 

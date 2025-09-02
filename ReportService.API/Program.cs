@@ -13,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ReportService API", Version = "v1" });
+//});
 
 // DbContext
 builder.Services.AddDbContext<ReportDbContext>(options =>
@@ -41,28 +46,19 @@ builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report>
 builder.Services.AddHostedService<ReportBackgroundService>();
 
 //// MassTransit + RabbitMQ
-//builder.Services.AddMassTransit(x =>
-//{
-//    x.AddConsumer<PersonCreatedEventConsumer>();
-
-//    x.UsingRabbitMq((context, cfg) =>
-//    {
-//        cfg.Host("localhost", "/", h => { });
-
-//        cfg.ReceiveEndpoint("person-created-event-queue", e =>
-//        {
-//            e.ConfigureConsumer<PersonCreatedEventConsumer>(context);
-//        });
-//    });
-//});
-
 builder.Services.AddMassTransit(cfg =>
 {
     cfg.AddConsumer<ReportContactsPreparedConsumer>();
 
     cfg.UsingRabbitMq((context, config) =>
     {
-        config.Host("rabbitmq://localhost");
+        //config.Host("rabbitmq://localhost");
+
+        config.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
 
         config.ReceiveEndpoint("report-contacts-prepared-queue", e =>
         {
@@ -71,12 +67,15 @@ builder.Services.AddMassTransit(cfg =>
     });
 });
 
+
 var app = builder.Build();
 
 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 else
 {
@@ -87,7 +86,7 @@ else
 
 // Configure the HTTP request pipeline.
 app.UseRouting();
-
+app.UseHttpsRedirection();
 app.MapControllers();
-
 app.Run();
+

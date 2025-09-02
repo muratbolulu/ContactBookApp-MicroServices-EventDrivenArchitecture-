@@ -23,23 +23,5 @@ namespace ReportService.API.Controllers
             var result = await _mediator.Send(new CreateReportCommand(request.Location));
             return Ok(result);
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateReport([FromBody] CreateReportCommand command)
-        //{
-        //    var reportId = await _mediator.Send(command);
-        //    return CreatedAtAction(nameof(GetReportById), new { id = reportId }, null);
-        //}
-
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetReportById(Guid id)
-        //{
-        //    var result = await _mediator.Send(new GetReportByIdQuery(id));
-        //    if (result == null)
-        //        return NotFound();
-
-        //    return Ok(result);
-        //}
     }
-
 }

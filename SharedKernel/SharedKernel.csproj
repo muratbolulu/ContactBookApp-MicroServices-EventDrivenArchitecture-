@@ -11,8 +11,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ContactService.Domain\ContactService.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

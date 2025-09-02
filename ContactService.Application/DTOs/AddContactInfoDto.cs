@@ -1,4 +1,4 @@
-﻿using ContactService.Domain.Enums;
+﻿using SharedKernel.Enums;
 
 namespace ContactService.Application.DTOs;
 

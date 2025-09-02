@@ -1,15 +1,16 @@
 ﻿using ContactService.Application.Interfaces;
 using MassTransit;
+using SharedKernel.Enums;
 using SharedKernel.Events.Reports;
 
 namespace ContactService.Application.Features.Reports.Consumers;
 
-public class ReportRequestedConsumer : IConsumer<ReportRequestedEvent>
+public class ReportRequestedEventConsumer : IConsumer<ReportRequestedEvent>
 {
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IContactInfoService _contactInfoService;
 
-    public ReportRequestedConsumer(
+    public ReportRequestedEventConsumer(
         IPublishEndpoint publishEndpoint,
         IContactInfoService contactInfoService)
     {
@@ -21,16 +22,20 @@ public class ReportRequestedConsumer : IConsumer<ReportRequestedEvent>
     {
         var message = context.Message;
 
+        //Console.WriteLine($"Report requested for location: {context.Message.Location}");
+
         // Lokasyona göre Contact bilgilerini çek
         var contacts = await _contactInfoService.GetContactsByLocationAsync(message.Location);
-        
+
+        //Console.WriteLine($"Found {contacts.Count} contacts");
+
         // DTO'ya dönüştür
         var contactDtos = contacts.Select(c => new ContactDto
         {
             ContactId = c.Id,
-            FullName = c.Person.FirstName + " " + c.Person.LastName,
-            Email = c.Person.ContactInfos.FirstOrDefault(ci => ci.Type == Domain.Enums.ContactType.Email)?.Value,
-            Phone = c.Person.ContactInfos.FirstOrDefault(ci => ci.Type == Domain.Enums.ContactType.Phone)?.Value
+            FullName = c.Person != null ? $"{c.Person.FirstName} {c.Person.LastName}" : string.Empty,
+            Email = c.Person?.ContactInfos?.FirstOrDefault(ci => ci.Type == ContactType.Email)?.Value,
+            Phone = c.Person?.ContactInfos?.FirstOrDefault(ci => ci.Type == ContactType.Phone)?.Value
         }).ToList();
 
         // Rapor için hazırlanmış event
