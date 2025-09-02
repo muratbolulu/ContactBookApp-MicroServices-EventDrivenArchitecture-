@@ -10,14 +10,14 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 
 ### 1. **ContactService**
 - Kullanıcı ekleme-silme kişi yönetimi işlemlerini yapar. 
-- Contact ekleme-silme yönetimi işlemlerini yapar. 
+- İletişim bilgilerini ekleme-silme yönetimi işlemlerini yapar.
+- PostgreSQL veritabanı kullanır.
 - **ReportService**'ten gelen olayları dinler (`ReportCreatedEventConsumer`).
 
 ### 2. **ReportService**
 - Olay yayınlamak için **IPublishEndpoint** (MassTransit) kullanır.
-- Gelen olaylara göre rapor verilerini oluşturur ve saklar.
+- Gelen olaylara göre rapor verilerini ilk ve son halini oluşturur ve saklar.
 - PostgreSQL veritabanı kullanır.
-- **BackgroundService** ile rapor işlemlerini asenkron yürütür.
 
 ### 3. **SharedKernel**
 - Tüm mikroservislerin kullandığı ortak event ve interface tanımlarını barındırır.
