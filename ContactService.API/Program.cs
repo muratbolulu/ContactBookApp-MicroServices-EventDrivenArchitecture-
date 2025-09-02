@@ -70,6 +70,7 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("report-contacts-prepared-queue", e =>
         {
             e.ConfigureConsumer<ReportRequestedEventConsumer>(context);
+            e.Durable = true; // queue kalýcý
         });
     });
 });

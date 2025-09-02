@@ -41,6 +41,7 @@ public class CreateReportCommandHandler : IRequestHandler<CreateReportCommand, G
             RequestedAt = DateTime.UtcNow
         };
 
+        //queue durable olduğu için kalıcı (Program.cs te ayarlandı.)
         await _publishEndpoint.Publish(@event, cancellationToken);
 
         return @event.ReportId;

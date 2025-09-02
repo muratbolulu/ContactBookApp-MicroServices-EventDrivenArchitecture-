@@ -4,7 +4,6 @@ using ReportService.Application.Features.Reports.Consumers;
 using ReportService.Application.Interfaces;
 using ReportService.Application.Mappings;
 using ReportService.Domain.Entities;
-using ReportService.Infrastructure.NewFolder.Services;
 using ReportService.Infrastructure.Persistence;
 using ReportService.Infrastructure.Persistence.Repositories;
 using System.Reflection;
@@ -43,7 +42,7 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IGenericRepository<Report>, GenericRepository<Report>>();
 
 // Hosted Service
-builder.Services.AddHostedService<ReportBackgroundService>();
+//builder.Services.AddHostedService<ReportBackgroundService>();
 
 //// MassTransit + RabbitMQ
 builder.Services.AddMassTransit(cfg =>
