@@ -1,4 +1,4 @@
-﻿# SeturProject - Microservices with MassTransit & RabbitMQ
+﻿# Microservices with EF Core & Event Driven Architecture & CQRS(MediatR) & MassTransit & PostgreSQL & AutoMapper & 
 
 Bu proje, **ContactService** ve **ReportService** isimli iki mikroservis ile **Event-Driven Architecture** prensibine uygun olarak geliştirilmiştir.  
 Servisler, **MassTransit** kütüphanesi aracılığıyla **RabbitMQ** üzerinden haberleşir.  
