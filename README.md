@@ -37,7 +37,7 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 - **xUnit** + **MassTransit.Testing**
 
 ---
-## Migrations ve Çlıştırmalar
+## Migrations ve Çalıştırmalar
 - **ContactService.API "Set As Startup Project" sonrasında  add-migration initial ile migration oluşturulabilir.**
 - Akabinde **Update-Database** komutu ile veritabanı yoksa eklenebilir.**
 - POST https://localhost:7033/api/persons ile person oluşturulabilir.
