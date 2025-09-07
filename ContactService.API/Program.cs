@@ -1,3 +1,4 @@
+using ContactService.API.Middleware;
 using ContactService.Application.Features.Persons.Handlers.QueryHandlers;
 using ContactService.Application.Features.Reports.Consumers;
 using ContactService.Application.Interface;
@@ -5,6 +6,7 @@ using ContactService.Application.Interfaces;
 using ContactService.Application.Mappings;
 using ContactService.Application.Services;
 using ContactService.Domain.Entities;
+using ContactService.Infrastructure.Logging;
 using ContactService.Infrastructure.Messaging.Consumers;
 using ContactService.Infrastructure.Messaging.Services;
 using ContactService.Infrastructure.Persistence;
@@ -14,6 +16,8 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Nest;
+using SharedKernel.Interfaces;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
@@ -90,7 +94,23 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ContactService API", Version = "v1" });
 });
 
+
+// Elastic client setup
+var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+    .DefaultIndex("contactservice-logs");
+var elasticClient = new ElasticClient(settings);
+
+builder.Services.AddSingleton<IElasticClient>(elasticClient);
+builder.Services.AddScoped(typeof(IAppLogger<>), typeof(ElasticsearchLogger<>));
+
+//for httpcontext accessor (for correlation id)
+builder.Services.AddHttpContextAccessor();
+
+
 var app = builder.Build();
+
+//for correlation id
+app.UseMiddleware<CorrelationIdMiddleware>();
 
 //Middleware 
 if (app.Environment.IsDevelopment())

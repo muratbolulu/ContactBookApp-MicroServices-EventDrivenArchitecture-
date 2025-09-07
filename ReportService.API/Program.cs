@@ -1,11 +1,14 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using ReportService.API.Middleware;
 using ReportService.Application.Features.Reports.Consumers;
 using ReportService.Application.Interfaces;
 using ReportService.Application.Mappings;
 using ReportService.Domain.Entities;
+using ReportService.Infrastructure.Logging;
 using ReportService.Infrastructure.Persistence;
 using ReportService.Infrastructure.Persistence.Repositories;
+using SharedKernel.Interfaces;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,9 +69,19 @@ builder.Services.AddMassTransit(cfg =>
     });
 });
 
+//ElasticSearch
+builder.Services.AddScoped(typeof(IAppLogger<>), typeof(ElasticsearchLogger<>));
+
+//for httpcontext accessor (for correlation id)
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
+// Middleware zincirine ekle
+//app.UseCorrelationId(); // extension method ile de eklenebilir.
+
+//for correlation id
+app.UseMiddleware<CorrelationIdMiddleware>(); // custom middleware
 
 if (app.Environment.IsDevelopment())
 {
