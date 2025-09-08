@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using ReportService.API.Middleware;
 using ReportService.Application.Features.Reports.Consumers;
 using ReportService.Application.Interfaces;
@@ -66,11 +67,20 @@ builder.Services.AddMassTransit(cfg =>
         {
             e.ConfigureConsumer<ReportContactsPreparedConsumer>(context);
         });
+
+        //config.ConfigureEndpoints(context); // tüm consumerlarý tek seferde configure eder, çakýþma önler
+
     });
 });
 
 //ElasticSearch
 builder.Services.AddScoped(typeof(IAppLogger<>), typeof(ElasticsearchLogger<>));
+builder.Services.AddSingleton<IElasticClient>(sp =>
+{
+    var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+        .DefaultIndex("reports");
+    return new ElasticClient(settings);
+});
 
 //for httpcontext accessor (for correlation id)
 builder.Services.AddHttpContextAccessor();
