@@ -34,6 +34,7 @@ Ayrıca, **CQRS** ve **Clean Architecture** yaklaşımları kullanılmıştır.
 - **Entity Framework Core**
 - **AutoMapper**
 - **CQRS (MediatR)**
+- **Elasticsearch (9200) + Kibana (5601)**
 - **xUnit** + **MassTransit.Testing**
 
 ---
